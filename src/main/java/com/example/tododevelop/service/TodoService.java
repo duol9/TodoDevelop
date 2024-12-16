@@ -1,5 +1,6 @@
 package com.example.tododevelop.service;
 
+import com.example.tododevelop.dto.FindAllTodoResponseDto;
 import com.example.tododevelop.dto.TodoRequestDto;
 import com.example.tododevelop.dto.TodoResponseDto;
 import com.example.tododevelop.entity.TodoEntity;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,5 +29,10 @@ public class TodoService {
         optionalTodoEntity.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dose not exist id " + id));
         TodoEntity findTodo = optionalTodoEntity.get();
         return new TodoResponseDto(findTodo.getId(), findTodo.getUserName(), findTodo.getTitle(), findTodo.getContents());
+    }
+
+    public FindAllTodoResponseDto findAllTodos(){
+        List<TodoEntity> findAllTodo = todoRepository.findAll();
+        return new FindAllTodoResponseDto(findAllTodo);
     }
 }

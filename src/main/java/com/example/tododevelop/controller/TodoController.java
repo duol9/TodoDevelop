@@ -1,5 +1,6 @@
 package com.example.tododevelop.controller;
 
+import com.example.tododevelop.dto.FindAllTodoResponseDto;
 import com.example.tododevelop.dto.TodoRequestDto;
 import com.example.tododevelop.dto.TodoResponseDto;
 import com.example.tododevelop.service.TodoService;
@@ -24,5 +25,11 @@ public class TodoController {
     public ResponseEntity<TodoResponseDto> findById(@PathVariable Long id){
         TodoResponseDto todoResponseDto = todoService.findById(id);
         return new ResponseEntity<>(todoResponseDto, HttpStatus.FOUND);
+    }
+
+    @GetMapping
+    public ResponseEntity<FindAllTodoResponseDto> findAllTodos(){
+        FindAllTodoResponseDto allTodosDto = todoService.findAllTodos();
+        return new ResponseEntity<>(allTodosDto, HttpStatus.FOUND);
     }
 }
