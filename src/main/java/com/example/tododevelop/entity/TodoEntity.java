@@ -1,7 +1,9 @@
 package com.example.tododevelop.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "todos")
 public class TodoEntity extends BaseEntity{
@@ -9,9 +11,18 @@ public class TodoEntity extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, unique = true)
-    private String name;
+    private String userName;
     private String title;
 
     @Column(columnDefinition = "longtext")
     private String contents;
+
+    public TodoEntity(String userName, String title, String contents) {
+        this.userName = userName;
+        this.title = title;
+        this.contents = contents;
+    }
+
+    public TodoEntity() {
+    }
 }
