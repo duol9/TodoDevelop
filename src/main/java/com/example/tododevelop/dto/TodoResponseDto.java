@@ -13,7 +13,8 @@ public class TodoResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public TodoResponseDto(String userName, String title, String contents){
+    public TodoResponseDto(Long id, String userName, String title, String contents){
+        this.id = id;
         this.userName = userName;
         this.title = title;
         this.contents = contents;
