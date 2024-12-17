@@ -1,5 +1,6 @@
 package com.example.tododevelop.entity;
 
+import com.example.tododevelop.dto.TodoCreateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +14,6 @@ public class TodoEntity extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, length = 10)
-    private String userName;
     private String title;
 
     @Column(columnDefinition = "longtext")
@@ -22,17 +21,20 @@ public class TodoEntity extends BaseEntity{
 
     @Setter
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id") // 외래키 설정, User테이블의 id 참조
+    @JoinColumn(name = "user_Id", referencedColumnName = "id") // 외래키 설정, User테이블의 id 참조
     private UserEntity userEntity;
 
     // 기본 생성자
-    public TodoEntity() {
+    protected TodoEntity() {
     }
 
-    public TodoEntity(String userName, String title, String contents) {
-        this.userName = userName;
+    private TodoEntity(String title, String contents) {
         this.title = title;
         this.contents = contents;
+    }
+
+    public static TodoEntity createDtoOfTodoEntity(TodoCreateRequestDto dto){
+        return new TodoEntity(dto.getTitle(), dto.getContents());
     }
 
     @Override

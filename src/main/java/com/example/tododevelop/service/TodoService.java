@@ -21,7 +21,7 @@ public class TodoService {
 
     // 할 일 생성
     public TodoResponseDto createTodo(TodoCreateRequestDto dto){
-        TodoEntity todoEntity = new TodoEntity(dto.getUserName(), dto.getTitle(), dto.getContents());
+        TodoEntity todoEntity = TodoEntity.createDtoOfTodoEntity(dto);
         TodoEntity savedTodo = todoRepository.save(todoEntity);
         return new TodoResponseDto(savedTodo);
     }
