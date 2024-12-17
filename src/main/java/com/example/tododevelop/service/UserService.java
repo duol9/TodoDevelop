@@ -6,7 +6,9 @@ import com.example.tododevelop.dto.UserSignUpRequestDto;
 import com.example.tododevelop.entity.UserEntity;
 import com.example.tododevelop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -26,5 +28,17 @@ public class UserService {
     public AllUserResponseDto findAllUser() {
         List<UserEntity> findAllUser = userRepository.findAll();
         return new AllUserResponseDto(findAllUser);
+    }
+
+    // 유저 조회
+    public UserResponseDto findUser(Long id){
+        UserEntity findUser = findByIdOrElseThrow(id);
+        return new UserResponseDto(findUser);
+    }
+
+    // 유저 조회 후 예외처리
+    public UserEntity findByIdOrElseThrow(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dose not exist id " + id));
     }
 }
