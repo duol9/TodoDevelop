@@ -1,8 +1,6 @@
 package com.example.tododevelop.controller;
 
-import com.example.tododevelop.dto.FindAllTodoResponseDto;
-import com.example.tododevelop.dto.TodoRequestDto;
-import com.example.tododevelop.dto.TodoResponseDto;
+import com.example.tododevelop.dto.*;
 import com.example.tododevelop.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +15,7 @@ public class TodoController {
 
     // 할일생성
     @PostMapping
-    public ResponseEntity<TodoResponseDto> createTodo(@RequestBody TodoRequestDto dto) {
+    public ResponseEntity<TodoResponseDto> createTodo(@RequestBody TodoCreateRequestDto dto) {
         TodoResponseDto todoResponseDto = todoService.createTodo(dto);
         return new ResponseEntity<>(todoResponseDto, HttpStatus.CREATED);
     }
@@ -38,7 +36,7 @@ public class TodoController {
 
     // 할일 수정
     @PatchMapping("/{id}")
-    public ResponseEntity<TodoResponseDto> modifyTodo(@PathVariable Long id, @RequestBody TodoRequestDto dto) {
+    public ResponseEntity<TodoResponseDto> modifyTodo(@PathVariable Long id, @RequestBody TodoModifyRequestDto dto) {
         TodoResponseDto todoResponseDto = todoService.modifyTodo(id, dto);
         return new ResponseEntity<>(todoResponseDto, HttpStatus.OK);
     }

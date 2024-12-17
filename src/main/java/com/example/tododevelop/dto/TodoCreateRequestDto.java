@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class TodoRequestDto {
+public class TodoCreateRequestDto {
     private String userName;
     private String title;
     private String contents;

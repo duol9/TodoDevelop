@@ -1,7 +1,8 @@
 package com.example.tododevelop.service;
 
 import com.example.tododevelop.dto.FindAllTodoResponseDto;
-import com.example.tododevelop.dto.TodoRequestDto;
+import com.example.tododevelop.dto.TodoCreateRequestDto;
+import com.example.tododevelop.dto.TodoModifyRequestDto;
 import com.example.tododevelop.dto.TodoResponseDto;
 import com.example.tododevelop.entity.TodoEntity;
 import com.example.tododevelop.repository.TodoRepository;
@@ -19,7 +20,7 @@ public class TodoService {
     private final TodoRepository todoRepository;
 
     // 할 일 생성
-    public TodoResponseDto createTodo(TodoRequestDto dto){
+    public TodoResponseDto createTodo(TodoCreateRequestDto dto){
         TodoEntity todoEntity = new TodoEntity(dto.getUserName(), dto.getTitle(), dto.getContents());
         TodoEntity savedTodo = todoRepository.save(todoEntity);
         return new TodoResponseDto(savedTodo);
@@ -39,7 +40,7 @@ public class TodoService {
 
     // 할 일 수정
     @Transactional
-    public TodoResponseDto modifyTodo(Long id, TodoRequestDto dto) {
+    public TodoResponseDto modifyTodo(Long id, TodoModifyRequestDto dto) {
         TodoEntity findTodo = findByIdOrElseThrow(id);
         findTodo.modifyTodo(dto.getContents());
         return new TodoResponseDto(findTodo);
