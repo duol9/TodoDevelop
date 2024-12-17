@@ -24,14 +24,14 @@ public class TodoController {
     @GetMapping("/{id}")
     public ResponseEntity<TodoResponseDto> findById(@PathVariable Long id){
         TodoResponseDto todoResponseDto = todoService.findById(id);
-        return new ResponseEntity<>(todoResponseDto, HttpStatus.FOUND);
+        return new ResponseEntity<>(todoResponseDto, HttpStatus.OK);
     }
 
     // 할일 전체 조회
     @GetMapping
-    public ResponseEntity<FindAllTodoResponseDto> findAllTodos(){
-        FindAllTodoResponseDto allTodosDto = todoService.findAllTodos();
-        return new ResponseEntity<>(allTodosDto, HttpStatus.FOUND);
+    public ResponseEntity<AllTodoResponseDto> findAllTodos(){
+        AllTodoResponseDto allTodosDto = todoService.findAllTodos();
+        return new ResponseEntity<>(allTodosDto, HttpStatus.OK);
     }
 
     // 할일 수정

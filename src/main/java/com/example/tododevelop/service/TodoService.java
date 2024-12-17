@@ -1,6 +1,6 @@
 package com.example.tododevelop.service;
 
-import com.example.tododevelop.dto.FindAllTodoResponseDto;
+import com.example.tododevelop.dto.AllTodoResponseDto;
 import com.example.tododevelop.dto.TodoCreateRequestDto;
 import com.example.tododevelop.dto.TodoModifyRequestDto;
 import com.example.tododevelop.dto.TodoResponseDto;
@@ -33,9 +33,9 @@ public class TodoService {
     }
 
     // 할일 전체 조회
-    public FindAllTodoResponseDto findAllTodos(){
+    public AllTodoResponseDto findAllTodos(){
         List<TodoEntity> findAllTodo = todoRepository.findAll();
-        return new FindAllTodoResponseDto(findAllTodo);
+        return new AllTodoResponseDto(findAllTodo);
     }
 
     // 할 일 수정
