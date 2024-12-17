@@ -47,5 +47,13 @@ public class TodoService {
         return new TodoResponseDto(findTodo.getId(), findTodo.getUserName(), findTodo.getTitle(), findTodo.getContents());
     }
 
+    // 할 일 삭제
+    public void deleteTodo(Long id) {
+        Optional<TodoEntity> optionalTodoEntity = todoRepository.findById(id);
+        optionalTodoEntity.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dose not exist id " + id));
+        TodoEntity findTodo = optionalTodoEntity.get();
+        todoRepository.delete(findTodo);
+    }
+
 
 }
