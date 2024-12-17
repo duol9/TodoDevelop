@@ -5,6 +5,7 @@ import com.example.tododevelop.dto.TodoRequestDto;
 import com.example.tododevelop.dto.TodoResponseDto;
 import com.example.tododevelop.entity.TodoEntity;
 import com.example.tododevelop.repository.TodoRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -35,4 +36,16 @@ public class TodoService {
         List<TodoEntity> findAllTodo = todoRepository.findAll();
         return new FindAllTodoResponseDto(findAllTodo);
     }
+
+    // 할 일 수정
+    @Transactional
+    public TodoResponseDto modifyTodo(Long id, TodoRequestDto dto) {
+        Optional<TodoEntity> optionalTodoEntity = todoRepository.findById(id);
+        optionalTodoEntity.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dose not exist id " + id));
+        TodoEntity findTodo = optionalTodoEntity.get();
+        findTodo.modifyTodo(dto.getContents());
+        return new TodoResponseDto(findTodo.getId(), findTodo.getUserName(), findTodo.getTitle(), findTodo.getContents());
+    }
+
+
 }

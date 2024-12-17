@@ -25,4 +25,8 @@ public class TodoEntity extends BaseEntity{
 
     public TodoEntity() {
     }
+
+    public void modifyTodo(String contents){
+        this.contents = contents;
+    }
 }
