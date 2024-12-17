@@ -17,15 +17,17 @@ public class TodoEntity extends BaseEntity{
     @Column(columnDefinition = "longtext")
     private String contents;
 
+    // 기본 생성자
+    public TodoEntity() {
+    }
+
     public TodoEntity(String userName, String title, String contents) {
         this.userName = userName;
         this.title = title;
         this.contents = contents;
     }
 
-    public TodoEntity() {
-    }
-
+    // JPA를 사용해 할일 수정(setter)
     public void modifyTodo(String contents){
         this.contents = contents;
     }

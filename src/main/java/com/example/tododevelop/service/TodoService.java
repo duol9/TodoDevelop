@@ -19,12 +19,14 @@ import java.util.Optional;
 public class TodoService {
     private final TodoRepository todoRepository;
 
+    // 할 일 생성
     public TodoResponseDto createTodo(TodoRequestDto dto){
         TodoEntity todoEntity = new TodoEntity(dto.getUserName(), dto.getTitle(), dto.getContents());
         TodoEntity savedTodo = todoRepository.save(todoEntity);
         return new TodoResponseDto(savedTodo.getId(), savedTodo.getUserName(), savedTodo.getTitle(), savedTodo.getContents());
     }
 
+    // 할일 단건 조회
     public TodoResponseDto findById(Long id) {
         Optional<TodoEntity> optionalTodoEntity = todoRepository.findById(id);
         optionalTodoEntity.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dose not exist id " + id));
@@ -32,6 +34,7 @@ public class TodoService {
         return new TodoResponseDto(findTodo.getId(), findTodo.getUserName(), findTodo.getTitle(), findTodo.getContents());
     }
 
+    // 할일 전체 조회
     public FindAllTodoResponseDto findAllTodos(){
         List<TodoEntity> findAllTodo = todoRepository.findAll();
         return new FindAllTodoResponseDto(findAllTodo);
