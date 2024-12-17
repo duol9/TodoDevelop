@@ -22,13 +22,13 @@ public class TodoService {
     public TodoResponseDto createTodo(TodoRequestDto dto){
         TodoEntity todoEntity = new TodoEntity(dto.getUserName(), dto.getTitle(), dto.getContents());
         TodoEntity savedTodo = todoRepository.save(todoEntity);
-        return new TodoResponseDto(savedTodo.getId(), savedTodo.getUserName(), savedTodo.getTitle(), savedTodo.getContents());
+        return new TodoResponseDto(savedTodo);
     }
 
     // 할일 단건 조회
     public TodoResponseDto findById(Long id) {
         TodoEntity findTodo = findByIdOrElseThrow(id);
-        return new TodoResponseDto(findTodo.getId(), findTodo.getUserName(), findTodo.getTitle(), findTodo.getContents());
+        return new TodoResponseDto(findTodo);
     }
 
     // 할일 전체 조회
@@ -42,7 +42,7 @@ public class TodoService {
     public TodoResponseDto modifyTodo(Long id, TodoRequestDto dto) {
         TodoEntity findTodo = findByIdOrElseThrow(id);
         findTodo.modifyTodo(dto.getContents());
-        return new TodoResponseDto(findTodo.getId(), findTodo.getUserName(), findTodo.getTitle(), findTodo.getContents());
+        return new TodoResponseDto(findTodo);
     }
 
     // 할 일 삭제
@@ -55,6 +55,4 @@ public class TodoService {
     public TodoEntity findByIdOrElseThrow(Long id) {
         return todoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dose not exist id " + id));
     }
-
-
 }
