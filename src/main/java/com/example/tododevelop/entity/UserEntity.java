@@ -22,6 +22,9 @@ public class UserEntity {
     private String userName;
     private String email;
 
+    @Column(nullable = false)
+    private String password;
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDate createdAt;
@@ -29,14 +32,15 @@ public class UserEntity {
     // 최소한으로 접근을 제한하기 위해 접근 제어자 protected
     protected UserEntity() {}
 
-    private UserEntity(String userName, String email) {
+    private UserEntity(String userName, String email, String password) {
         this.userName = userName;
         this.email = email;
+        this.password = password;
     }
 
     // 유저생성requestDto -> UserEntity
     public static UserEntity signUpDtoOfUserEntity(UserSignUpRequestDto dto) {
-        return new UserEntity(dto.getUserName(), dto.getEmail());
+        return new UserEntity(dto.getUserName(), dto.getEmail(), dto.getPassword());
     }
 
     // 유저 정보 수정

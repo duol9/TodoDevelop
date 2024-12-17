@@ -44,6 +44,12 @@ public class UserService {
         return new UserResponseDto(findUser);
     }
 
+    // 유저 삭제
+    public void deleteUser(long id) {
+        UserEntity findUser = findByIdOrElseThrow(id);
+        userRepository.delete(findUser);
+    }
+
     // 유저 조회 후 예외처리
     public UserEntity findByIdOrElseThrow(Long id) {
         return userRepository.findById(id)
