@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor // 필수 필드로만 이루어진 생성자
@@ -28,9 +27,7 @@ public class TodoService {
 
     // 할일 단건 조회
     public TodoResponseDto findById(Long id) {
-        Optional<TodoEntity> optionalTodoEntity = todoRepository.findById(id);
-        optionalTodoEntity.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dose not exist id " + id));
-        TodoEntity findTodo = optionalTodoEntity.get();
+        TodoEntity findTodo = findByIdOrElseThrow(id);
         return new TodoResponseDto(findTodo.getId(), findTodo.getUserName(), findTodo.getTitle(), findTodo.getContents());
     }
 
@@ -43,19 +40,20 @@ public class TodoService {
     // 할 일 수정
     @Transactional
     public TodoResponseDto modifyTodo(Long id, TodoRequestDto dto) {
-        Optional<TodoEntity> optionalTodoEntity = todoRepository.findById(id);
-        optionalTodoEntity.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dose not exist id " + id));
-        TodoEntity findTodo = optionalTodoEntity.get();
+        TodoEntity findTodo = findByIdOrElseThrow(id);
         findTodo.modifyTodo(dto.getContents());
         return new TodoResponseDto(findTodo.getId(), findTodo.getUserName(), findTodo.getTitle(), findTodo.getContents());
     }
 
     // 할 일 삭제
     public void deleteTodo(Long id) {
-        Optional<TodoEntity> optionalTodoEntity = todoRepository.findById(id);
-        optionalTodoEntity.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dose not exist id " + id));
-        TodoEntity findTodo = optionalTodoEntity.get();
+        TodoEntity findTodo = findByIdOrElseThrow(id);
         todoRepository.delete(findTodo);
+    }
+
+    // 일정 조회 예외처리
+    public TodoEntity findByIdOrElseThrow(Long id) {
+        return todoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dose not exist id " + id));
     }
 
 
