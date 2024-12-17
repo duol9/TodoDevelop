@@ -1,6 +1,7 @@
 package com.example.tododevelop.service;
 
 import com.example.tododevelop.dto.AllUserResponseDto;
+import com.example.tododevelop.dto.UserModifyRequestDto;
 import com.example.tododevelop.dto.UserResponseDto;
 import com.example.tododevelop.dto.UserSignUpRequestDto;
 import com.example.tododevelop.entity.UserEntity;
@@ -33,6 +34,13 @@ public class UserService {
     // 유저 조회
     public UserResponseDto findUser(Long id){
         UserEntity findUser = findByIdOrElseThrow(id);
+        return new UserResponseDto(findUser);
+    }
+
+    // 유저 정보 수정
+    public UserResponseDto modifyUserInfo(Long id, UserModifyRequestDto dto) {
+        UserEntity findUser = findByIdOrElseThrow(id);
+        findUser.modifyUserInfo(dto);
         return new UserResponseDto(findUser);
     }
 

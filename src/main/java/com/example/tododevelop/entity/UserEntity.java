@@ -1,5 +1,6 @@
 package com.example.tododevelop.entity;
 
+import com.example.tododevelop.dto.UserModifyRequestDto;
 import com.example.tododevelop.dto.UserSignUpRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -36,5 +37,15 @@ public class UserEntity {
     // 유저생성requestDto -> UserEntity
     public static UserEntity signUpDtoOfUserEntity(UserSignUpRequestDto dto) {
         return new UserEntity(dto.getUserName(), dto.getEmail());
+    }
+
+    // 유저 정보 수정
+    public void modifyUserInfo(UserModifyRequestDto dto){
+        if (dto.getEmail() != null) {
+            this.email = dto.getEmail();
+        }
+        if (dto.getUserName() != null) {
+            this.userName = dto.getUserName();
+        }
     }
 }

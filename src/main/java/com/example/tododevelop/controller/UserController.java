@@ -1,6 +1,7 @@
 package com.example.tododevelop.controller;
 
 import com.example.tododevelop.dto.AllUserResponseDto;
+import com.example.tododevelop.dto.UserModifyRequestDto;
 import com.example.tododevelop.dto.UserResponseDto;
 import com.example.tododevelop.dto.UserSignUpRequestDto;
 import com.example.tododevelop.service.UserService;
@@ -29,9 +30,17 @@ public class UserController {
         return new ResponseEntity<>(allUserResponseDto, HttpStatus.OK);
     }
 
+    // 유저 단건 조회
     @GetMapping("/user_list/{id}")
     public ResponseEntity<UserResponseDto> findUser(@PathVariable Long id) {
         UserResponseDto userResponseDto = userService.findUser(id);
+        return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
+    }
+
+    // 유저 정보 수정
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResponseDto> modifyUserInfo(@PathVariable Long id, @RequestBody UserModifyRequestDto modifyRequestDto) {
+        UserResponseDto userResponseDto = userService.modifyUserInfo(id, modifyRequestDto);
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 }
