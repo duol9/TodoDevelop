@@ -3,6 +3,8 @@ package com.example.tododevelop.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 @Getter
 @Entity
 @Table(name = "todos")
@@ -25,6 +27,16 @@ public class TodoEntity extends BaseEntity{
         this.userName = userName;
         this.title = title;
         this.contents = contents;
+    }
+
+    @Override
+    public LocalDate getCreatAt() {
+        return super.getCreatAt();
+    }
+
+    @Override
+    public LocalDate getModifiedAt() {
+        return super.getModifiedAt();
     }
 
     // JPA를 사용해 할일 수정(setter)
