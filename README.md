@@ -16,3 +16,280 @@
 
 ## API 명세서 ##
 
+### 1. 회원가입 ###
+Method
+```
+POST
+```
+URI
+```
+/users/signup
+```
+요청
+```
+{
+    "userName":"이름",
+    "email":"xx@xxx.com",
+    "password":"1234"
+}
+```
+응답
+```
+201 Created
+회원가입 되었습니다.
+```
+응답2
+```
+409 CONFLICT
+이미 존재하는 이메일입니다.
+```
+### 2. 로그인 ###
+Method
+```
+POST
+```
+URI
+```
+/users/login
+```
+요청
+```
+{
+    "email":"xx@naver.com",
+    "password":"1234"
+}
+```
+응답
+```
+200 OK
+로그인 성공했습니다.
+```
+응답2
+```
+401 UNAUTHORIZED
+로그인 실패
+```
+
+### 3. 유저 전체 조회 ###
+Method
+```
+GET
+```
+URI
+```
+/users/user_list
+```
+응답
+```
+200 OK
+{
+    "allUser": [
+        {
+            "userName": "이름",
+            "email": "xx@xxx.com",
+            "createdAt": "2024-12-19"
+        }
+    ]
+}
+```
+
+### 4. 유저 단건 조회 ###
+Method
+```
+GET
+```
+URI
+```
+/users/user_list/{id}
+```
+응답
+```
+200 OK
+{
+    "userName": "이름",
+    "email": "xx@xxx.com",
+    "createAt": "2024-12-19"
+}
+```
+응답2
+```
+404 NOT_FOUND
+해당 id가 존재하지 않습니다.
+```
+
+### 5. 유저 정보 수정 ###
+Method
+```
+PATCH
+```
+URI
+```
+/users/{id}
+```
+요청
+```
+{
+    "userName":"수정된 이름"
+}
+```
+응답
+```
+200 OK
+{
+    "userName": "수정된 이름",
+    "email": "xx@xxx.com",
+    "createAt": "2024-12-19"
+}
+```
+응답2
+```
+404 NOT_FOUND
+해당 id가 존재하지 않습니다.
+```
+
+### 6. 유저 삭제 ###
+Method
+```
+DELETE
+```
+URI
+```
+/users/{id}
+```
+응답
+```
+200 OK
+```
+응답2
+```
+404 NOT_FOUND
+해당 id가 존재하지 않습니다.
+```
+
+### 7. 일정 생성 ###
+Method
+```
+POST
+```
+URI
+```
+/todos
+```
+요청
+```
+{
+"title":"제목",
+"contents":"할 일"
+}
+```
+응답
+```
+201 Created
+{
+    "name": "이름",
+    "title": "제목",
+    "contents": "할 일",
+    "createdAt": "2024-12-19",
+    "modifiedAt": "2024-12-19"
+}
+```
+응답2
+```
+404 NOT_FOUND
+유저 조회 불가
+```
+
+### 8. 일정 단건 조회 ###
+Method
+```
+GET
+```
+URI
+```
+/todos/{id}
+```
+응답
+```
+200 OK
+{
+    "name": "이름",
+    "title": "제목",
+    "contents": "할 일",
+    "createdAt": "2024-12-19",
+    "modifiedAt": "2024-12-19"
+}
+```
+응답2
+```
+404 NOT_FOUND
+일정 조회 불가
+```
+
+### 9. 일정 전체 조회 ###
+Method
+```
+GET
+```
+URI
+```
+/todos
+```
+응답
+```
+200 OK
+{
+    "allTodos": [
+        {
+            "name": "이름",
+            "title": "제목33",
+            "contents": "할 일",
+            "createdAt": "2024-12-19",
+            "modifiedAt": "2024-12-19"
+        }
+    ]
+}
+```
+### 10. 일정 수정 ###
+Method
+```
+PATCH
+```
+URI
+```
+/todos/{id}
+```
+요청
+```
+{
+    "contents":"할일 수정"
+}
+```
+응답
+```
+200 OK
+{
+    "name": "이름",
+    "title": "제목",
+    "contents": "할일 수정",
+    "createdAt": "2024-12-19",
+    "modifiedAt": "2024-12-19"
+}
+```
+응답2
+```
+401 UNAUTHORIZED
+작성자만 수정할 수 있습니다.
+```
+
+### 11. 일정 삭제 ###
+Method
+```
+DELETE
+```
+URI
+```
+/todos/{id}
+```
+응답
+```
+200 OK
