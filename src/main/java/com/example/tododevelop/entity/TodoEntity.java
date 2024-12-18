@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -25,6 +27,10 @@ public class TodoEntity extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "user_Id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_user_id")) // 외래키 설정, User테이블의 id 참조
     private UserEntity userEntity;
+
+    @Setter
+    @OneToMany(mappedBy = "todoEntity")
+    private List<ReplyEntity> replys = new ArrayList<>();
 
     // 기본 생성자
     protected TodoEntity() {
@@ -49,8 +55,13 @@ public class TodoEntity extends BaseEntity{
         return super.getModifiedAt();
     }
 
-    // JPA를 사용해 할일 수정(setter)
+    // 할일 수정(setter)
     public void modifyTodo(String contents){
         this.contents = contents;
+    }
+
+    public void addReply(ReplyEntity replyEntity) {
+        replys.add(replyEntity);
+        replyEntity.setTodoEntity(this);
     }
 }

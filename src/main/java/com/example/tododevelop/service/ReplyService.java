@@ -1,5 +1,6 @@
 package com.example.tododevelop.service;
 
+import com.example.tododevelop.dto.reply.AllReplyResponseDto;
 import com.example.tododevelop.dto.reply.ReplyResponseDto;
 import com.example.tododevelop.dto.reply.WriteReplyRequestDto;
 import com.example.tododevelop.entity.ReplyEntity;
@@ -8,6 +9,8 @@ import com.example.tododevelop.entity.UserEntity;
 import com.example.tododevelop.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +30,14 @@ public class ReplyService {
         replyEntity.setUserEntity(userEntity);
 
         ReplyEntity writeReplyEntity = replyRepository.save(replyEntity);
+        todoEntity.addReply(writeReplyEntity);
 
         return new ReplyResponseDto(writeReplyEntity);
+    }
+
+    public AllReplyResponseDto findReplys(Long todoId) {
+        TodoEntity todoEntity = todoService.findByIdOrElseThrow(todoId);
+        List<ReplyEntity> replys = todoEntity.getReplys();
+        return new AllReplyResponseDto(replys);
     }
 }

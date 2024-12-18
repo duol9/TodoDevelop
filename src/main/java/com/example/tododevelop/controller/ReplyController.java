@@ -1,5 +1,6 @@
 package com.example.tododevelop.controller;
 
+import com.example.tododevelop.dto.reply.AllReplyResponseDto;
 import com.example.tododevelop.dto.reply.ReplyResponseDto;
 import com.example.tododevelop.dto.reply.WriteReplyRequestDto;
 import com.example.tododevelop.service.ReplyService;
@@ -26,5 +27,11 @@ public class ReplyController {
 
         ReplyResponseDto replyResponseDto = replyService.writeReply(dto, todoId, userId);
         return new ResponseEntity<>(replyResponseDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/{todoId}/reply")
+    public ResponseEntity<AllReplyResponseDto> ReplysByTodo (@PathVariable Long todoId) {
+        AllReplyResponseDto allReplyResponseDto = replyService.findReplys(todoId);
+        return new ResponseEntity<>(allReplyResponseDto, HttpStatus.FOUND);
     }
 }
