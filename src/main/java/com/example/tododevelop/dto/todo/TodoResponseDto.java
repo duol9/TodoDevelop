@@ -17,7 +17,7 @@ public class TodoResponseDto {
         this.name = todoEntity.getUserEntity().getUserName();
         this.title = todoEntity.getTitle();
         this.contents = todoEntity.getContents();
-        this.createdAt = todoEntity.getCreatAt();
+        this.createdAt = todoEntity.getCreatedAt();
         this.modifiedAt = todoEntity.getModifiedAt();
     }
 }

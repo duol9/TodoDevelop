@@ -40,8 +40,8 @@ public class TodoEntity extends BaseEntity{
     }
 
     @Override
-    public LocalDate getCreatAt() {
-        return super.getCreatAt();
+    public LocalDate getCreatedAt() {
+        return super.getCreatedAt();
     }
 
     @Override
