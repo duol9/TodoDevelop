@@ -60,6 +60,7 @@ public class TodoService {
         todoRepository.delete(findTodo);
     }
 
+    // 조회 후 존재 여부 검사
    public TodoEntity findByIdOrElseThrow(Long id) {
         return todoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정을 찾을 수 없습니다."));
     }
