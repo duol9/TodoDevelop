@@ -1,7 +1,7 @@
 package com.example.tododevelop.entity;
 
-import com.example.tododevelop.dto.UserModifyRequestDto;
-import com.example.tododevelop.dto.UserSignUpRequestDto;
+import com.example.tododevelop.dto.user.UserModifyRequestDto;
+import com.example.tododevelop.dto.user.SignUpRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
@@ -41,7 +41,7 @@ public class UserEntity {
     }
 
     // 유저생성requestDto -> UserEntity
-    public static UserEntity signUpDtoOfUserEntity(UserSignUpRequestDto dto) {
+    public static UserEntity signUpDtoOfUserEntity(SignUpRequestDto dto) {
         return new UserEntity(dto.getUserName(), dto.getEmail(), dto.getPassword());
     }
 

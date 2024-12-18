@@ -1,9 +1,9 @@
 package com.example.tododevelop.service;
 
-import com.example.tododevelop.dto.AllTodoResponseDto;
-import com.example.tododevelop.dto.TodoCreateRequestDto;
-import com.example.tododevelop.dto.TodoModifyRequestDto;
-import com.example.tododevelop.dto.TodoResponseDto;
+import com.example.tododevelop.dto.todo.AllTodoResponseDto;
+import com.example.tododevelop.dto.todo.TodoCreateRequestDto;
+import com.example.tododevelop.dto.todo.TodoModifyRequestDto;
+import com.example.tododevelop.dto.todo.TodoResponseDto;
 import com.example.tododevelop.entity.TodoEntity;
 import com.example.tododevelop.entity.UserEntity;
 import com.example.tododevelop.repository.TodoRepository;

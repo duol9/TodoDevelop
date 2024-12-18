@@ -1,6 +1,6 @@
 package com.example.tododevelop.entity;
 
-import com.example.tododevelop.dto.TodoCreateRequestDto;
+import com.example.tododevelop.dto.todo.TodoCreateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

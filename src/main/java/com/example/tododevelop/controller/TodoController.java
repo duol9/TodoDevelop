@@ -1,9 +1,9 @@
 package com.example.tododevelop.controller;
 
-import com.example.tododevelop.dto.AllTodoResponseDto;
-import com.example.tododevelop.dto.TodoCreateRequestDto;
-import com.example.tododevelop.dto.TodoModifyRequestDto;
-import com.example.tododevelop.dto.TodoResponseDto;
+import com.example.tododevelop.dto.todo.AllTodoResponseDto;
+import com.example.tododevelop.dto.todo.TodoCreateRequestDto;
+import com.example.tododevelop.dto.todo.TodoModifyRequestDto;
+import com.example.tododevelop.dto.todo.TodoResponseDto;
 import com.example.tododevelop.service.TodoService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
