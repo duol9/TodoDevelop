@@ -1,4 +1,4 @@
-package com.example.tododevelop.dto;
+package com.example.tododevelop.dto.todo;
 
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.example.tododevelop.dto;
+package com.example.tododevelop.dto.todo;
 
 import com.example.tododevelop.entity.TodoEntity;
 import lombok.Getter;
