@@ -1,9 +1,6 @@
 package com.example.tododevelop.service;
 
-import com.example.tododevelop.dto.AllUserResponseDto;
-import com.example.tododevelop.dto.UserModifyRequestDto;
-import com.example.tododevelop.dto.UserResponseDto;
-import com.example.tododevelop.dto.UserSignUpRequestDto;
+import com.example.tododevelop.dto.*;
 import com.example.tododevelop.entity.UserEntity;
 import com.example.tododevelop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +20,19 @@ public class UserService {
         UserEntity userEntity = UserEntity.signUpDtoOfUserEntity(signUpRequestDto);
         UserEntity signUpUser = userRepository.save(userEntity);
         return new UserResponseDto(signUpUser);
+    }
+
+    // 로그인
+    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
+
+        UserEntity user = userRepository.findIdByEmailAndPassword(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+
+        // 로그인 실패
+        if (user.getId() == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "이메일 또는 비밀번호가 일치하지 않습니다.");
+        }
+
+        return new LoginResponseDto(user.getId());
     }
 
     // 전체 회원 조회
