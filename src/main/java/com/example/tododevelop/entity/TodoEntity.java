@@ -23,7 +23,7 @@ public class TodoEntity extends BaseEntity{
 
     @Setter
     @ManyToOne
-    @JoinColumn(name = "user_Id", referencedColumnName = "id") // 외래키 설정, User테이블의 id 참조
+    @JoinColumn(name = "user_Id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_user_id")) // 외래키 설정, User테이블의 id 참조
     private UserEntity userEntity;
 
     // 기본 생성자
