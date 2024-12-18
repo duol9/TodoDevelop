@@ -1,6 +1,8 @@
 package com.example.tododevelop.service;
 
-import com.example.tododevelop.dto.*;
+import com.example.tododevelop.config.PasswordEncoder;
+import com.example.tododevelop.dto.MessageResponseDto;
+import com.example.tododevelop.dto.user.*;
 import com.example.tododevelop.entity.UserEntity;
 import com.example.tododevelop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,25 +16,41 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // 회원가입(유저생성)
-    public UserResponseDto signUp(UserSignUpRequestDto signUpRequestDto) {
+    public MessageResponseDto signUp(SignUpRequestDto signUpRequestDto) {
+        // 이메일 중복 확인
+        if (userRepository.existsByEmail(signUpRequestDto.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다.");
+        }
+
+        // 비밀번호 암호화
+        String encodePassword = passwordEncoder.encode(signUpRequestDto.getPassword());
+        signUpRequestDto.setPassword(encodePassword);
+
+        // dto -> entity
         UserEntity userEntity = UserEntity.signUpDtoOfUserEntity(signUpRequestDto);
-        UserEntity signUpUser = userRepository.save(userEntity);
-        return new UserResponseDto(signUpUser);
+        // 정보 등록
+        userRepository.save(userEntity);
+        return new MessageResponseDto("회원가입 되었습니다.");
     }
 
     // 로그인
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
-
-        UserEntity user = userRepository.findIdByEmailAndPassword(loginRequestDto.getEmail(), loginRequestDto.getPassword());
-
-        // 로그인 실패
-        if (user.getId() == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "이메일 또는 비밀번호가 일치하지 않습니다.");
+        // 일치하는 이메일이 없으면
+        if (!userRepository.existsByEmail(loginRequestDto.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "이메일이 다시 확인해주세요.");
         }
 
-        return new LoginResponseDto(user.getId());
+        // 이메일과 일치하는 유저 정보 get
+        UserEntity user = userRepository.findByEmail(loginRequestDto.getEmail());
+        // 비밀번호 일치 검사
+        if(passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
+            return new LoginResponseDto(user.getId());
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+        }
     }
 
     // 전체 회원 조회
