@@ -1,7 +1,6 @@
 package com.example.tododevelop.service;
 
 import com.example.tododevelop.config.PasswordEncoder;
-import com.example.tododevelop.dto.MessageResponseDto;
 import com.example.tododevelop.dto.user.*;
 import com.example.tododevelop.entity.UserEntity;
 import com.example.tododevelop.repository.UserRepository;
@@ -19,7 +18,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 회원가입(유저생성)
-    public MessageResponseDto signUp(SignUpRequestDto signUpRequestDto) {
+    public void signUp(SignUpRequestDto signUpRequestDto) {
         // 이메일 중복 확인
         if (userRepository.existsByEmail(signUpRequestDto.getEmail())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다.");
@@ -33,7 +32,6 @@ public class UserService {
         UserEntity userEntity = UserEntity.signUpDtoOfUserEntity(signUpRequestDto);
         // 정보 등록
         userRepository.save(userEntity);
-        return new MessageResponseDto("회원가입 되었습니다.");
     }
 
     // 로그인

@@ -1,6 +1,6 @@
 package com.example.tododevelop.controller;
 
-import com.example.tododevelop.dto.*;
+import com.example.tododevelop.dto.user.*;
 import com.example.tododevelop.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,9 +21,9 @@ public class UserController {
 
     // 유저 생성(회원가입)
     @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> signUp(@RequestBody UserSignUpRequestDto signUpRequestDto) {
-        UserResponseDto userResponseDto = userService.signUp(signUpRequestDto);
-        return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
+    public ResponseEntity<String> signUp(@RequestBody SignUpRequestDto signUpRequestDto) {
+        userService.signUp(signUpRequestDto);
+        return new ResponseEntity<>("회원가입 되었습니다.", HttpStatus.CREATED);
     }
 
     // 유저 로그인
