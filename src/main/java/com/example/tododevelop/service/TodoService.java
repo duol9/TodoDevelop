@@ -5,6 +5,7 @@ import com.example.tododevelop.dto.TodoCreateRequestDto;
 import com.example.tododevelop.dto.TodoModifyRequestDto;
 import com.example.tododevelop.dto.TodoResponseDto;
 import com.example.tododevelop.entity.TodoEntity;
+import com.example.tododevelop.entity.UserEntity;
 import com.example.tododevelop.repository.TodoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,18 @@ import java.util.List;
 @RequiredArgsConstructor // 필수 필드로만 이루어진 생성자
 public class TodoService {
     private final TodoRepository todoRepository;
+    private final UserService userService;
 
     // 할 일 생성
-    public TodoResponseDto createTodo(TodoCreateRequestDto dto){
+    public TodoResponseDto createTodo(TodoCreateRequestDto dto, Long userId){
         TodoEntity todoEntity = TodoEntity.createDtoOfTodoEntity(dto);
+
+        // 할 일을 생성한 유저의 정보 저장
+        UserEntity userEntity = userService.findByIdOrElseThrow(userId);
+        todoEntity.setUserEntity(userEntity);
+
         TodoEntity savedTodo = todoRepository.save(todoEntity);
+
         return new TodoResponseDto(savedTodo);
     }
 
@@ -52,8 +60,7 @@ public class TodoService {
         todoRepository.delete(findTodo);
     }
 
-    // 일정 조회 예외처리
-    public TodoEntity findByIdOrElseThrow(Long id) {
-        return todoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dose not exist id " + id));
+   public TodoEntity findByIdOrElseThrow(Long id) {
+        return todoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정을 찾을 수 없습니다."));
     }
 }
