@@ -32,29 +32,39 @@ public class TodoController {
 
     // 할일 단건 조회
     @GetMapping("/{id}")
-    public ResponseEntity<TodoResponseDto> findById(@PathVariable Long id){
+    public ResponseEntity<TodoResponseDto> findById(@PathVariable Long id, HttpServletRequest httpServletRequest){
         TodoResponseDto todoResponseDto = todoService.findById(id);
         return new ResponseEntity<>(todoResponseDto, HttpStatus.OK);
     }
 
     // 할일 전체 조회
     @GetMapping
-    public ResponseEntity<AllTodoResponseDto> findAllTodos(){
+    public ResponseEntity<AllTodoResponseDto> findAllTodos(HttpServletRequest httpServletRequest){
         AllTodoResponseDto allTodosDto = todoService.findAllTodos();
         return new ResponseEntity<>(allTodosDto, HttpStatus.OK);
     }
 
     // 할일 수정
     @PatchMapping("/{id}")
-    public ResponseEntity<TodoResponseDto> modifyTodo(@PathVariable Long id, @RequestBody TodoModifyRequestDto dto) {
-        TodoResponseDto todoResponseDto = todoService.modifyTodo(id, dto);
+    public ResponseEntity<TodoResponseDto> modifyTodo(@PathVariable Long id, @RequestBody TodoModifyRequestDto dto, HttpServletRequest httpServletRequest) {
+        // 세션 get. 새로 생성하지는 X
+        HttpSession httpSession = httpServletRequest.getSession(false);
+        // 세션에서 로그인 한 유저의 id(식별자) get
+        Long userId = (Long) httpSession.getAttribute("userId");
+
+        TodoResponseDto todoResponseDto = todoService.modifyTodo(id, userId, dto);
         return new ResponseEntity<>(todoResponseDto, HttpStatus.OK);
     }
 
     // 할일 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
-        todoService.deleteTodo(id);
+    public ResponseEntity<Void> deleteTodo(@PathVariable Long id, HttpServletRequest httpServletRequest) {
+        // 세션 get. 새로 생성하지는 X
+        HttpSession httpSession = httpServletRequest.getSession(false);
+        // 세션에서 로그인 한 유저의 id(식별자) get
+        Long userId = (Long) httpSession.getAttribute("userId");
+
+        todoService.deleteTodo(id,userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

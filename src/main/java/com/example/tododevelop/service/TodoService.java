@@ -62,8 +62,11 @@ public class TodoService {
     }
 
     // 할 일 삭제
-    public void deleteTodo(Long id) {
+    public void deleteTodo(Long id, Long userId) {
         TodoEntity findTodo = findByIdOrElseThrow(id);
+        if (findTodo.getUserEntity().getId() != userId) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "작성자만 삭제 가능합니다.");
+        }
         todoRepository.delete(findTodo);
     }
 
