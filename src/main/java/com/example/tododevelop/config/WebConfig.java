@@ -1,5 +1,7 @@
-package com.example.tododevelop.filter;
+package com.example.tododevelop.config;
 
+import com.example.tododevelop.filter.CustomFilter;
+import com.example.tododevelop.filter.LoginFilter;
 import jakarta.servlet.Filter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
