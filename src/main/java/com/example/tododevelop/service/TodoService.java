@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor // 필수 필드로만 이루어진 생성자
@@ -43,13 +44,19 @@ public class TodoService {
     // 할일 전체 조회
     public AllTodoResponseDto findAllTodos(){
         List<TodoEntity> findAllTodo = todoRepository.findAll();
-        return new AllTodoResponseDto(findAllTodo);
+        List<TodoResponseDto> findTodoDtos = findAllTodo.stream()
+                .map(TodoResponseDto::new)
+                .collect(Collectors.toList());
+        return new AllTodoResponseDto(findTodoDtos);
     }
 
     // 할 일 수정
     @Transactional
-    public TodoResponseDto modifyTodo(Long id, TodoModifyRequestDto dto) {
+    public TodoResponseDto modifyTodo(Long id, Long userId, TodoModifyRequestDto dto) {
         TodoEntity findTodo = findByIdOrElseThrow(id);
+        if (findTodo.getUserEntity().getId() != userId) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "작성자만 수정 가능합니다.");
+        }
         findTodo.modifyTodo(dto.getContents());
         return new TodoResponseDto(findTodo);
     }

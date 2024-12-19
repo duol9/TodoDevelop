@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +39,10 @@ public class ReplyService {
     public AllReplyResponseDto findReplys(Long todoId) {
         TodoEntity todoEntity = todoService.findByIdOrElseThrow(todoId);
         List<ReplyEntity> replys = todoEntity.getReplys();
-        return new AllReplyResponseDto(replys);
+        List<ReplyResponseDto> replysDto = replys.stream()
+                .map(ReplyResponseDto::new)
+                .collect(Collectors.toList());
+        return new AllReplyResponseDto(replysDto);
     }
+
 }

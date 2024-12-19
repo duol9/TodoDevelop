@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +55,10 @@ public class UserService {
     // 전체 회원 조회
     public AllUserResponseDto findAllUser() {
         List<UserEntity> findAllUser = userRepository.findAll();
-        return new AllUserResponseDto(findAllUser);
+        List<UserResponseDto> usersDto = findAllUser.stream()
+                .map(UserResponseDto::new)
+                .collect(Collectors.toList());
+        return new AllUserResponseDto(usersDto);
     }
 
     // 유저 조회
