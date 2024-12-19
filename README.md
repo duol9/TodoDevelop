@@ -4,6 +4,13 @@
 - 필수 https://github.com/duol9/TodoDevelop/tree/required
 - Lv6. https://github.com/duol9/TodoDevelop/tree/lv6
 
+## 목적
+- CRUD 구현
+- JPA를 활용해 엔티티 간의 연관관계 매핑
+- 쿠키와 세션, 필터로 로그인 인증/인가 설계
+- 비밀번호 암호화
+- Validatiion을 사용해 예외처리 및 데이터 검증 
+
 ## 개발환경
 - Java17
 - Spring Boot (3.4.0)
