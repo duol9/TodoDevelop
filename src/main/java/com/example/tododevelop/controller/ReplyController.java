@@ -36,4 +36,17 @@ public class ReplyController {
         AllReplyResponseDto allReplyResponseDto = replyService.findReplys(todoId);
         return new ResponseEntity<>(allReplyResponseDto, HttpStatus.FOUND);
     }
+
+    // 댓글 수정
+    @PutMapping("/{todoId}/reply/{replyId}")
+    public ResponseEntity<ReplyResponseDto> modifyReply (@PathVariable Long todoId, @PathVariable Long replyId, @RequestBody ReplyRequestDto dto, HttpServletRequest httpServletRequest) {
+        // 세션 get. 새로 생성하지는 X
+        HttpSession httpSession = httpServletRequest.getSession(false);
+        // 세션에서 로그인 한 유저의 id(식별자) get
+        Long userId = (Long) httpSession.getAttribute("userId");
+
+        ReplyResponseDto replyResponseDto = replyService.modifyReply(dto, replyId, todoId, userId);
+
+        return new ResponseEntity<>(replyResponseDto, HttpStatus.OK);
+    }
 }
