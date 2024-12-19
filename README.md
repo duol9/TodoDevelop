@@ -300,3 +300,116 @@ URI
 응답
 ```
 200 OK
+```
+응답2
+```
+401 UNAUTHORIZED
+작성자만 수정할 수 있습니다.
+```
+
+### 12. 댓글 작성 ###
+Method
+```
+POST
+```
+URI
+```
+/todos/{todoId}/reply
+```
+요청
+```
+{
+    "comment":"댓글"
+}
+```
+응답
+```
+200 OK
+{
+    "userName": "이름",
+    "todoTitle": "제목",
+    "comment": "댓글",
+    "createdAt": "2024-12-19",
+    "modifiedAt": "2024-12-19"
+}
+```
+
+### 13. 댓글 조회 ###
+Method
+```
+GET
+```
+URI
+```
+/todos/{todoId}/reply
+```
+응답
+```
+302 FOUND
+{
+    "replyEntityList": [
+        {
+            "userName": "이름",
+            "todoTitle": "제목",
+            "comment": null,
+            "createdAt": "2024-12-19",
+            "modifiedAt": "2024-12-19"
+        }
+    ]
+}
+```
+### 14. 댓글 수정 ###
+Method
+```
+PUT
+```
+URI
+```
+/todos/{todoId}/reply/{replyId}
+```
+요청
+```
+{
+    "comment":"댓글수정"
+}
+```
+응답
+```
+200 OK
+{
+    "userName": "이름",
+    "todoTitle": "제목",
+    "comment": "댓글수정",
+    "createdAt": "2024-12-19",
+    "modifiedAt": "2024-12-20"
+}
+```
+응답2
+```
+404 NOT FOUND 
+존재하지 않은 댓글입니다.
+401 UNAUTHORIZED
+작성자만 수정할 수 있습니다.
+```
+
+### 15. 댓글 삭제 ###
+Method
+```
+DELETE
+```
+URI
+```
+/todos/{todoId}/reply/{replyId}
+```
+응답
+```
+200 OK
+삭제 되었습니다.
+```
+응답2
+```
+404 NOT FOUND 
+존재하지 않은 댓글입니다.
+401 UNAUTHORIZED
+작성자만 삭제할 수 있습니다.
+```
