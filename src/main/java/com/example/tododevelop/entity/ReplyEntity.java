@@ -4,6 +4,8 @@ import com.example.tododevelop.dto.reply.WriteReplyRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
@@ -18,12 +20,14 @@ public class ReplyEntity extends BaseEntity{
     private String comment;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_Id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_user_id"))
     private UserEntity userEntity;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "todos_Id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_todos_id"))
     private TodoEntity todoEntity;
 
@@ -33,7 +37,7 @@ public class ReplyEntity extends BaseEntity{
         this.comment = comment;
     }
     public static ReplyEntity replyResponseDtoOfReplyEntity(WriteReplyRequestDto dto){
-        return new ReplyEntity(dto.getConment());
+        return new ReplyEntity(dto.getComment());
     }
 
     @Override
