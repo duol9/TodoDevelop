@@ -46,29 +46,39 @@ public class UserController {
 
     // 유저 전체 조회
     @GetMapping("/user_list")
-    public ResponseEntity<AllUserResponseDto> findAllUser() {
+    public ResponseEntity<AllUserResponseDto> findAllUser(HttpServletRequest httpServletRequest) {
         AllUserResponseDto allUserResponseDto = userService.findAllUser();
         return new ResponseEntity<>(allUserResponseDto, HttpStatus.OK);
     }
 
     // 유저 단건 조회
     @GetMapping("/user_list/{id}")
-    public ResponseEntity<UserResponseDto> findUser(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDto> findUser(@PathVariable Long id, HttpServletRequest httpServletRequest) {
         UserResponseDto userResponseDto = userService.findUser(id);
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
     // 유저 정보 수정
     @PatchMapping("/{id}")
-    public ResponseEntity<UserResponseDto> modifyUserInfo(@PathVariable Long id, @RequestBody UserModifyRequestDto modifyRequestDto) {
-        UserResponseDto userResponseDto = userService.modifyUserInfo(id, modifyRequestDto);
+    public ResponseEntity<UserResponseDto> modifyUserInfo(@PathVariable Long id, @RequestBody UserModifyRequestDto modifyRequestDto, HttpServletRequest httpServletRequest) {
+        // 세션 get. 새로 생성하지는 X
+        HttpSession httpSession = httpServletRequest.getSession(false);
+        // 세션에서 로그인 한 유저의 id(식별자) get
+        Long userId = (Long) httpSession.getAttribute("userId");
+
+        UserResponseDto userResponseDto = userService.modifyUserInfo(id, userId, modifyRequestDto);
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
     // 유저 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id, HttpServletRequest httpServletRequest) {
+        // 세션 get. 새로 생성하지는 X
+        HttpSession httpSession = httpServletRequest.getSession(false);
+        // 세션에서 로그인 한 유저의 id(식별자) get
+        Long userId = (Long) httpSession.getAttribute("userId");
+
+        userService.deleteUser(id, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

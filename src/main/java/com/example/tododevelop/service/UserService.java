@@ -68,14 +68,20 @@ public class UserService {
     }
 
     // 유저 정보 수정
-    public UserResponseDto modifyUserInfo(Long id, UserModifyRequestDto dto) {
+    public UserResponseDto modifyUserInfo(Long id, Long userId, UserModifyRequestDto dto) {
+        if (!id.equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인만 수정 가능합니다.");
+        }
         UserEntity findUser = findByIdOrElseThrow(id);
         findUser.modifyUserInfo(dto);
         return new UserResponseDto(findUser);
     }
 
     // 유저 삭제
-    public void deleteUser(long id) {
+    public void deleteUser(Long id, Long userId) {
+        if (!id.equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인만 삭제 가능합니다.");
+        }
         UserEntity findUser = findByIdOrElseThrow(id);
         userRepository.delete(findUser);
     }
