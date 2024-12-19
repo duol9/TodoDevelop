@@ -59,6 +59,16 @@ public class ReplyService {
         return new ReplyResponseDto(findReplyEntity);
     }
 
+    // 댓글 삭제
+    public void deleteReply(ReplyRequestDto requestDto, Long replyId, Long todoId, Long userId){
+        TodoEntity todoEntity = todoService.findByIdOrElseThrow(todoId);
+        ReplyEntity findReplyEntity = findByIdOrElseThrow(replyId);
+        if (!findReplyEntity.getUserEntity().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인만 삭제 가능합니다.");
+        }
+        replyRepository.delete(findReplyEntity);
+    }
+
     // 댓글 조회 후 예외처리
     public ReplyEntity findByIdOrElseThrow(Long id) {
         return replyRepository.findById(id)

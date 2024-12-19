@@ -49,4 +49,17 @@ public class ReplyController {
 
         return new ResponseEntity<>(replyResponseDto, HttpStatus.OK);
     }
+
+    // 댓글 삭제
+    @DeleteMapping("/{todoId}/reply/{replyId}")
+    public ResponseEntity<String> deleteReply (@PathVariable Long todoId, @PathVariable Long replyId, @RequestBody ReplyRequestDto dto, HttpServletRequest httpServletRequest) {
+        // 세션 get. 새로 생성하지는 X
+        HttpSession httpSession = httpServletRequest.getSession(false);
+        // 세션에서 로그인 한 유저의 id(식별자) get
+        Long userId = (Long) httpSession.getAttribute("userId");
+
+        replyService.deleteReply(dto, replyId, todoId, userId);
+
+        return new ResponseEntity<>("삭제되었습니다.", HttpStatus.OK);
+    }
 }
