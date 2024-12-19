@@ -1,6 +1,6 @@
 package com.example.tododevelop.entity;
 
-import com.example.tododevelop.dto.reply.WriteReplyRequestDto;
+import com.example.tododevelop.dto.reply.ReplyRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,7 +32,7 @@ public class ReplyEntity extends BaseEntity{
     private ReplyEntity(String comment) {
         this.comment = comment;
     }
-    public static ReplyEntity replyResponseDtoOfReplyEntity(WriteReplyRequestDto dto){
+    public static ReplyEntity replyResponseDtoOfReplyEntity(ReplyRequestDto dto){
         return new ReplyEntity(dto.getConment());
     }
 
@@ -44,5 +44,10 @@ public class ReplyEntity extends BaseEntity{
     @Override
     public LocalDate getModifiedAt() {
         return super.getModifiedAt();
+    }
+
+    // 댓글 수정
+    public void modifyReply(String comment){
+        this.comment = comment;
     }
 }
