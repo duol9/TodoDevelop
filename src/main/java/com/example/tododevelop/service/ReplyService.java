@@ -31,14 +31,12 @@ public class ReplyService {
         replyEntity.setUserEntity(userEntity);
 
         ReplyEntity writeReplyEntity = replyRepository.save(replyEntity);
-        todoEntity.addReply(writeReplyEntity);
 
         return new ReplyResponseDto(writeReplyEntity);
     }
 
     public AllReplyResponseDto findReplys(Long todoId) {
-        TodoEntity todoEntity = todoService.findByIdOrElseThrow(todoId);
-        List<ReplyEntity> replys = todoEntity.getReplys();
+        List<ReplyEntity> replys = replyRepository.findAllByTodoEntity_Id(todoId);
         List<ReplyResponseDto> replysDto = replys.stream()
                 .map(ReplyResponseDto::new)
                 .collect(Collectors.toList());
