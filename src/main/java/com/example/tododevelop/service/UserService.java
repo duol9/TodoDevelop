@@ -55,7 +55,6 @@ public class UserService {
     // 전체 회원 조회
     public AllUserResponseDto findAllUser() {
         List<UserEntity> findAllUser = userRepository.findAll();
-        //
         List<UserResponseDto> usersDto = findAllUser.stream()
                 .map(UserResponseDto::new)
                 .collect(Collectors.toList());
@@ -69,21 +68,15 @@ public class UserService {
     }
 
     // 유저 정보 수정
-    public UserResponseDto modifyUserInfo(Long id, Long userId, UserModifyRequestDto dto) {
+    public UserResponseDto modifyUserInfo(Long id, UserModifyRequestDto dto) {
         UserEntity findUser = findByIdOrElseThrow(id);
-        if (findUser.getId() != userId) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인만 삭제 가능합니다.");
-        }
         findUser.modifyUserInfo(dto);
         return new UserResponseDto(findUser);
     }
 
     // 유저 삭제
-    public void deleteUser(long id, Long userId) {
+    public void deleteUser(long id) {
         UserEntity findUser = findByIdOrElseThrow(id);
-        if (findUser.getId() != userId) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인만 삭제 가능합니다.");
-        }
         userRepository.delete(findUser);
     }
 
