@@ -1,20 +1,22 @@
 package com.example.tododevelop.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
 import com.example.tododevelop.dto.todo.AllTodoResponseDto;
 import com.example.tododevelop.dto.todo.TodoCreateRequestDto;
 import com.example.tododevelop.dto.todo.TodoModifyRequestDto;
 import com.example.tododevelop.dto.todo.TodoResponseDto;
 import com.example.tododevelop.entity.TodoEntity;
 import com.example.tododevelop.entity.UserEntity;
+import com.example.tododevelop.exception.ResponseCode;
+import com.example.tododevelop.exception.ValidateException;
 import com.example.tododevelop.repository.TodoRepository;
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor // 필수 필드로만 이루어진 생성자
@@ -55,7 +57,7 @@ public class TodoService {
     public TodoResponseDto modifyTodo(Long id, Long userId, TodoModifyRequestDto dto) {
         TodoEntity findTodo = findByIdOrElseThrow(id);
         if (findTodo.getUserEntity().getId() != userId) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "작성자만 수정 가능합니다.");
+            throw new ValidateException(ResponseCode.ID_MISMATCH);
         }
         findTodo.modifyTodo(dto.getContents());
         return new TodoResponseDto(findTodo);
@@ -65,13 +67,13 @@ public class TodoService {
     public void deleteTodo(Long id, Long userId) {
         TodoEntity findTodo = findByIdOrElseThrow(id);
         if (findTodo.getUserEntity().getId() != userId) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "작성자만 삭제 가능합니다.");
+            throw new ValidateException(ResponseCode.ID_MISMATCH);
         }
         todoRepository.delete(findTodo);
     }
 
     // 조회 후 존재 여부 검사
    public TodoEntity findByIdOrElseThrow(Long id) {
-        return todoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정을 찾을 수 없습니다."));
+        return todoRepository.findById(id).orElseThrow(() -> new ValidateException(ResponseCode.TODO_NOT_FOUND));
     }
 }

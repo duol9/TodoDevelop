@@ -1,16 +1,23 @@
 package com.example.tododevelop.service;
 
-import com.example.tododevelop.config.PasswordEncoder;
-import com.example.tododevelop.dto.user.*;
-import com.example.tododevelop.entity.UserEntity;
-import com.example.tododevelop.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
+import com.example.tododevelop.config.PasswordEncoder;
+import com.example.tododevelop.dto.user.AllUserResponseDto;
+import com.example.tododevelop.dto.user.LoginRequestDto;
+import com.example.tododevelop.dto.user.LoginResponseDto;
+import com.example.tododevelop.dto.user.SignUpRequestDto;
+import com.example.tododevelop.dto.user.UserModifyRequestDto;
+import com.example.tododevelop.dto.user.UserResponseDto;
+import com.example.tododevelop.entity.UserEntity;
+import com.example.tododevelop.exception.ResponseCode;
+import com.example.tododevelop.exception.ValidateException;
+import com.example.tododevelop.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +29,7 @@ public class UserService {
     public void signUp(SignUpRequestDto signUpRequestDto) {
         // 이메일 중복 확인
         if (userRepository.existsByEmail(signUpRequestDto.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다.");
+            throw new ValidateException(ResponseCode.EMAIL_NOT_FOUND);
         }
 
         // 비밀번호 암호화
@@ -39,7 +46,7 @@ public class UserService {
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
         // 일치하는 이메일이 없으면
         if (!userRepository.existsByEmail(loginRequestDto.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "이메일이 다시 확인해주세요.");
+            throw new ValidateException(ResponseCode.EMAIL_NOT_FOUND);
         }
 
         // 이메일과 일치하는 유저 정보 get
@@ -48,7 +55,7 @@ public class UserService {
         if(passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
             return new LoginResponseDto(user.getId());
         } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+            throw new ValidateException(ResponseCode.PASSWORD_MISMATCH);
         }
     }
 
@@ -70,7 +77,7 @@ public class UserService {
     // 유저 정보 수정
     public UserResponseDto modifyUserInfo(Long id, Long userId, UserModifyRequestDto dto) {
         if (!id.equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인만 수정 가능합니다.");
+            throw new ValidateException(ResponseCode.ID_MISMATCH);
         }
         UserEntity findUser = findByIdOrElseThrow(id);
         findUser.modifyUserInfo(dto);
@@ -80,7 +87,7 @@ public class UserService {
     // 유저 삭제
     public void deleteUser(Long id, Long userId) {
         if (!id.equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인만 삭제 가능합니다.");
+            throw new ValidateException(ResponseCode.ID_MISMATCH);
         }
         UserEntity findUser = findByIdOrElseThrow(id);
         userRepository.delete(findUser);
@@ -89,6 +96,6 @@ public class UserService {
     // 유저 조회 후 예외처리
     public UserEntity findByIdOrElseThrow(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dose not exist id " + id));
+                .orElseThrow(() -> new ValidateException(ResponseCode.ID_MISMATCH));
     }
 }

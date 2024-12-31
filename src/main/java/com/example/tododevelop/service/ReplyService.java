@@ -1,19 +1,21 @@
 package com.example.tododevelop.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
 import com.example.tododevelop.dto.reply.AllReplyResponseDto;
-import com.example.tododevelop.dto.reply.ReplyResponseDto;
 import com.example.tododevelop.dto.reply.ReplyRequestDto;
+import com.example.tododevelop.dto.reply.ReplyResponseDto;
 import com.example.tododevelop.entity.ReplyEntity;
 import com.example.tododevelop.entity.TodoEntity;
 import com.example.tododevelop.entity.UserEntity;
+import com.example.tododevelop.exception.ResponseCode;
+import com.example.tododevelop.exception.ValidateException;
 import com.example.tododevelop.repository.ReplyRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +54,7 @@ public class ReplyService {
         TodoEntity todoEntity = todoService.findByIdOrElseThrow(todoId);
         ReplyEntity findReplyEntity = findByIdOrElseThrow(replyId);
         if (!findReplyEntity.getUserEntity().getId().equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인만 수정 가능합니다.");
+            throw new ValidateException(ResponseCode.ID_MISMATCH);
         }
         findReplyEntity.modifyReply(requestDto.getConment());
 
@@ -64,7 +66,7 @@ public class ReplyService {
         TodoEntity todoEntity = todoService.findByIdOrElseThrow(todoId);
         ReplyEntity findReplyEntity = findByIdOrElseThrow(replyId);
         if (!findReplyEntity.getUserEntity().getId().equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인만 삭제 가능합니다.");
+            throw new ValidateException(ResponseCode.ID_MISMATCH);
         }
         replyRepository.delete(findReplyEntity);
     }
@@ -72,6 +74,6 @@ public class ReplyService {
     // 댓글 조회 후 예외처리
     public ReplyEntity findByIdOrElseThrow(Long id) {
         return replyRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않은 댓글입니다. "));
+                .orElseThrow(() -> new ValidateException(ResponseCode.COMMENT_NOT_FOUND));
     }
 }

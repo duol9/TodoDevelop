@@ -1,27 +1,38 @@
 package com.example.tododevelop.filter;
 
-import jakarta.servlet.*;
+import java.io.IOException;
+
+import org.springframework.util.PatternMatchUtils;
+
+import com.example.tododevelop.dto.ApiResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.PatternMatchUtils;
-
-import java.io.IOException;
 
 @Slf4j
 // 로그인 필터
 public class LoginFilter implements Filter {
     // 필터 적용 제외할 url
     private static final String[] WHITE_LIST = {"/", "/users/signup", "/users/login"};
+    private final ObjectMapper objectMapper;
+
+    public LoginFilter(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
                          FilterChain filterChain
     ) throws IOException, ServletException {
-
-        // 다양한 기능을 쓰기 위해 다운캐스팅 후 필터가 작동될 uri get
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String requestURI = httpServletRequest.getRequestURI();
 
@@ -37,7 +48,8 @@ public class LoginFilter implements Filter {
 
             // 로그인X
             if (session == null || session.getAttribute("userId") == null) {
-                throw new RuntimeException("로그인 해주세요.");
+                loginExceptionHandler(servletResponse);
+                return;
             }
 
             log.info("로그인되었습니다");
@@ -51,5 +63,18 @@ public class LoginFilter implements Filter {
         // request URI가 whiteListURL에 포함되는지 확인
         // 포함 true, 불포함 false
         return PatternMatchUtils.simpleMatch(WHITE_LIST, requestURI);
+    }
+
+    private void loginExceptionHandler(ServletResponse response) throws IOException {
+        // 응답 코드 설정
+        HttpServletResponse httpServletResponse = (HttpServletResponse)response;
+        httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        httpServletResponse.setContentType("application/json");
+        httpServletResponse.setCharacterEncoding("UTF-8");
+
+        // ApiResponse 객체를 JSON으로 변환
+        String jsonResponse = objectMapper.writeValueAsString(
+            ApiResponse.error(httpServletResponse.getStatus(), "로그인 헤주세요."));
+        httpServletResponse.getWriter().write(jsonResponse);
     }
 }
