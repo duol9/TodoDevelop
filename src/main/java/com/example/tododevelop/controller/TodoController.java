@@ -19,6 +19,7 @@ import com.example.tododevelop.service.TodoService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -29,7 +30,7 @@ public class TodoController {
 
 	// 할일생성
 	@PostMapping
-	public ResponseEntity<ApiResponse<TodoResponseDto>> createTodo(@RequestBody TodoCreateRequestDto dto,
+	public ResponseEntity<ApiResponse<TodoResponseDto>> createTodo(@Valid @RequestBody TodoCreateRequestDto dto,
 		HttpServletRequest httpServletRequest) {
 		// 세션 get. 새로 생성하지는 X
 		HttpSession httpSession = httpServletRequest.getSession(false);

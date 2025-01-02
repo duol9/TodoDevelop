@@ -23,6 +23,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +36,7 @@ public class UserController {
 
 	// 유저 생성(회원가입)
 	@PostMapping("/signup")
-	public ResponseEntity<ApiResponse<String>> signUp(@RequestBody SignUpRequestDto signUpRequestDto) {
+	public ResponseEntity<ApiResponse<String>> signUp(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
 		userService.signUp(signUpRequestDto);
 		return ResponseEntity.ok(
 			ApiResponse.success(201, "회원가입 성공", "회원가입 되었습니다."));
@@ -43,7 +44,7 @@ public class UserController {
 
 	// 유저 로그인
 	@PostMapping("/login")
-	public ResponseEntity<ApiResponse<String>> login(@RequestBody LoginRequestDto loginRequestDto,
+	public ResponseEntity<ApiResponse<String>> login(@Valid @RequestBody LoginRequestDto loginRequestDto,
 		HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) {
 		// 유저 조회
 		LoginResponseDto loginResponseDto = userService.login(loginRequestDto);
@@ -81,7 +82,7 @@ public class UserController {
 	// 유저 정보 수정
 	@PatchMapping("/{id}")
 	public ResponseEntity<ApiResponse<UserResponseDto>> modifyUserInfo(@PathVariable Long id,
-		@RequestBody UserModifyRequestDto modifyRequestDto, HttpServletRequest httpServletRequest) {
+		@Valid @RequestBody UserModifyRequestDto modifyRequestDto, HttpServletRequest httpServletRequest) {
 		// 세션 get. 새로 생성하지는 X
 		HttpSession httpSession = httpServletRequest.getSession(false);
 		// 세션에서 로그인 한 유저의 id(식별자) get
